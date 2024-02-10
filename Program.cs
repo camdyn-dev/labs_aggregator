@@ -2,6 +2,9 @@
  * 1. PdfPig - Used for text processing within PDFs
  * 2. CSVHelper - Used to take Results and aggregate them into a CSV file
  */
+
+// read path is C:\Users\camdyn\Desktop\health\bloodtests
+// save path is C:\Users\camdyn\Desktop\results.csv
 using UglyToad.PdfPig.DocumentLayoutAnalysis.PageSegmenter;
 using UglyToad.PdfPig;
 using labs_aggregator;
@@ -10,11 +13,12 @@ using System.Globalization;
 
 var repo = new LabsHolder();
 var program = new LabsReader(repo);
-//Console.WriteLine("Enter a path to read from...");
-//var path = Console.ReadLine();
-var path = "C:\\Users\\camdyn\\Desktop\\health\\bloodtests from myquest";
+Console.WriteLine("Enter a path to read from...");
+var path = Console.ReadLine();
+Console.WriteLine("Enter where you want to save the results...");
+var pathToSave = Console.ReadLine();
 program.Run(path);
-PDFReaderAndCSVWriter.WriteResultsToCSV(repo.Results, "compiledResults.csv");
+PDFReaderAndCSVWriter.WriteResultsToCSV(repo.Results, pathToSave);
 
 class LabsReader
 {
@@ -29,7 +33,7 @@ class LabsReader
     public void Run(string path)
     { // Basic run function; let's us decide whether or not we'll be reading one file or an entire directory
         Console.WriteLine("Is this path a directory? Y/N");
-        bool isDirectory = Console.ReadLine().Contains("Y") ? true : false;
+            bool isDirectory = Console.ReadLine().Contains("Y") ? true : false;
 
         if (isDirectory)
         {
