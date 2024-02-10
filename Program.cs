@@ -8,11 +8,25 @@ using labs_aggregator;
 using CsvHelper;
 using System.Globalization;
 
+var repo = new LabsHolder();
+var program = new LabsReader(repo);
+//Console.WriteLine("Enter a path to read from...");
+//var path = Console.ReadLine();
+var path = "C:\\Users\\camdyn\\Desktop\\health\\bloodtests from myquest";
+program.Run(path);
+PDFReaderAndCSVWriter.WriteResultsToCSV(repo.Results, "compiledResults.csv");
+
 class LabsReader
 {
-    public LabsHolder Repo { get; set; }
+    public LabsReader(LabsHolder repo)
+    {
+        Repo = repo;
+    }
 
-    void Run(string path)
+    public LabsHolder Repo { get; set; }
+    
+
+    public void Run(string path)
     { // Basic run function; let's us decide whether or not we'll be reading one file or an entire directory
         Console.WriteLine("Is this path a directory? Y/N");
         bool isDirectory = Console.ReadLine().Contains("Y") ? true : false;
@@ -28,6 +42,8 @@ class LabsReader
         {
             Repo.SaveLabResult(ReadLab(path));
         }
+        Repo.Results.Sort();
+
     }
 
     LabResult ReadLab(string labfilePath)
@@ -59,7 +75,7 @@ class LabsReader
                 {
                     // Take the first index of "Collected:", add the length of "Collected:" to it, and take the next 17 characters.
                     // This correlates to "MM/DD/YYYY TT/TT"
-                    var collectedLabResult = line.Substring(line.IndexOf("Collected:") + "Collected".Length,
+                    var collectedLabResult = line.Substring(line.IndexOf("Collected:") + "Collected:".Length,
                         17);
                     labResult.StoreResult("Collected:", collectedLabResult);
                     break; // this will save us iterations
@@ -102,6 +118,10 @@ class LabsReader
 }
 class LabsHolder
 { // this will basically handle the lab files by extracting the info we want from each file
+    public LabsHolder()
+    {
+        Results = new List<LabResult>();
+    }
 
     public List<LabResult> Results { get; set; }
     public static string[] LabNames { get; } = [
@@ -160,8 +180,10 @@ public static class PDFReaderAndCSVWriter
 
     public static void WriteResultsToCSV(IEnumerable<LabResult> resultsToWrite, string outputPath)
     { // Function to output results into CSV file; basically a copy of the example code from CsvHelper's website
-        var writer = new StreamWriter(outputPath);
-        var outputCsv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-        outputCsv.WriteRecords(resultsToWrite);
+        using (var writer = new StreamWriter(outputPath))
+        using (var outputCsv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        { 
+            outputCsv.WriteRecords(resultsToWrite); 
+        }
     }
 }
