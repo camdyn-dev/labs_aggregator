@@ -10,11 +10,12 @@ using System.Globalization;
 
 var repo = new LabsHolder();
 var program = new LabsReader(repo);
-//Console.WriteLine("Enter a path to read from...");
-//var path = Console.ReadLine();
-var path = "C:\\Users\\camdyn\\Desktop\\health\\bloodtests from myquest";
+Console.WriteLine("Enter a path to read from...");
+var path = Console.ReadLine();
+Console.WriteLine("Enter where you want to save the results...");
+var pathToSave = Console.ReadLine();
 program.Run(path);
-PDFReaderAndCSVWriter.WriteResultsToCSV(repo.Results, "compiledResults.csv");
+PDFReaderAndCSVWriter.WriteResultsToCSV(repo.Results, pathToSave);
 
 class LabsReader
 {
