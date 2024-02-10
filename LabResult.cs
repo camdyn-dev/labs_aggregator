@@ -6,7 +6,7 @@
 
 namespace labs_aggregator
 {
-    public record Result : IComparable<Result>
+    public record LabResult : IComparable<LabResult>
     {
         public DateTime CollectionDate { get; set; } // date our lab was collected
 
@@ -40,7 +40,7 @@ namespace labs_aggregator
 
 
         // START OF FUNCTIONS
-        public int CompareTo(Result? other)
+        public int CompareTo(LabResult? other)
         { // Implementing CompareTo so we can sort Results by date
             return DateTime.Compare(this.CollectionDate, other.CollectionDate);
         }
