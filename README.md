@@ -1,4 +1,4 @@
-# labs_aggregator
+# QuestLabs PDF Aggregator
 This is a project I've had in mind for a while and decided to recently work on it.
 
 Basicailly, I have a large backlog of lab results in PDFs and thought it may be interesting to compile all that information into a CSV file with the intention of creating some charts with Seaborn.
